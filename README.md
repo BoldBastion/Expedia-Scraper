@@ -1,125 +1,179 @@
-[Expedia Scraper](https://apify.com/getdataforme/Expedia-Scraper?fpr=data)
+[Expedia Scraper](https://apify.com/parseforge/expedia-scraper?fpr=data)
 
-# Expedia Reviews Spider - Apify Actor
+![ParseForge Banner](https://images.apifyusercontent.com/RHzPvdHJ2joNXJHSWjeziGDTOTaycOsfmbNq9q8ZVRM/w:1800/cb:1/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1BhcnNlRm9yZ2UvYXBpZnktYXNzZXRzL21haW4vYmFubmVyLmpwZw.webp)
 
-🕷️ **Automated web scraping actor for expedia**
+# 🏨 Expedia Hotel Scraper
 
-## 📋 Overview
+> **The Expedia Hotel Scraper extracts real-time hotel listings, with 23+ data fields per property, plus pagination for large-scale collection.**
 
-This Apify actor scrapes data from **expedia** using HTTP Request technology.
-It was automatically generated and synchronized from the central repository.
+## ✨ What Does It Do
 
-## 🔗 Repository Information
+- **Hotel Name & ID** - Unique property identifiers and official hotel names for tracking and matching
+- **Rates & Prices** - Per-night rates, total prices, and price breakdowns to monitor costs across properties
+- **Guest Ratings & Reviews** - Guest ratings (0–10 scale) and review counts to assess hotel quality and popularity
+- **Star Ratings** - Official star classifications (1–5 stars) for property quality comparison (with detail mode)
+- **Amenities & Highlights** - Featured amenities and property highlights from detail pages
+- **Location Data** - Street address, nearby places, and distances (with detail mode)
+- **Hotel Images** - Multiple property images for visual comparison and portfolio building
+- **Special Badges** - Promotional badges and special offers like "Free cancellation" or "Top pick"
+- **Flexible Filtering** - Search by destination, dates, guest count, star rating, price range, and sort order
 
-| Property | Value |
-| --- | --- |
-| **Repository Name** | `expedia_reviews_spider_apify_hrequest` |
-| **Spider Name** | `expedia_reviews_spider` |
-| **Target Domain** | expedia |
-| **Technology Type** | HTTP Request |
-| **Template Used** | `apify_hrequest_template` |
-| **Source Path** | `central_repo/src/custom/expedia/hrequest` |
-| **GitHub Repository** | [View Repository](https://github.com/getdataforme/expedia_reviews_spider_apify_hrequest) |
+## 🎬 Demo Video
 
-## 🏠 Parent Repository
+Demo video coming soon.
 
-This actor is automatically synchronized from the central repository:
+## 🔧 Input
 
-- **Central Repository**: [`getdataforme/central_repo`](https://github.com/getdataforme/central_repo)
-- **Source Spider File**: `central_repo/src/custom/expedia/hrequest/expedia_reviews_spider.py`
-- **Synchronization**: Automatic via GitHub Actions
-- **Last Sync**: 2025-08-01 11:04:31 UTC
+**Basic Search:**
 
-## 🔄 Development Workflow
+- **Start URL** - Paste an Expedia hotel search URL directly (overrides other filters)
+- **Destination** - City or region to search (e.g., "New York", "Paris"). Defaults to "New York"
+- **Check-in / Check-out** - Travel dates in YYYY-MM-DD format
+- **Adults / Children / Rooms** - Guest configuration
 
-### Making Changes
+**Filters:**
 
-1. **DO NOT** edit files directly in this repository
-2. Navigate to the [central repository](https://github.com/getdataforme/central_repo)
-3. Edit the spider file at: `central_repo/src/custom/expedia/hrequest/expedia_reviews_spider.py`
-4. Commit and push changes to the central repository
-5. The GitHub Action will automatically sync changes to this repository
+- **Max Items** - Hotels to collect (free users: 100 max; paid: up to 1,000,000)
+- **Min/Max Price Per Night** - Price range filter in USD
+- **Star Rating** - Filter by star level (5 only, 4–5, 3–5, etc.)
+- **Min Guest Rating** - Minimum guest score (0–10)
+- **Sort Order** - Recommended, Price Low→High, Price High→Low, Guest Rating, Star Rating
 
-### Sync Process
+**Detail Mode:**
 
-- Changes to spider files trigger automatic synchronization
-- The actor configuration and input schema are regenerated
-- This README is updated with the latest information
+- **Include Hotel Details** - Visit each hotel's page for star rating, address, amenities, highlights, and nearby places (slower but more complete)
 
-## 📁 Repository Structure
+**Example:**
 
 ```
-├── src/
-│   ├── main.py          # Apify actor entry point
-│   └── spiders/
-│       └── expedia_reviews_spider.py    # Spider implementation
-├── .actor/
-│   ├── actor.json       # Actor configuration
-│   └── input_schema.json # Input parameters schema
-├── requirements.txt     # Python dependencies
-└── README.md           # This file
+{
+  "destination": "Miami",
+  "checkIn": "2026-04-01",
+  "checkOut": "2026-04-05",
+  "adults": 2,
+  "maxItems": 50,
+  "priceMax": 250,
+  "sort": "PRICE_LOW_TO_HIGH"
+}
 ```
 
-## 🚀 Usage
+## 📊 Output
 
-### Local Development
+Each hotel record includes up to 23 fields:
 
 ```
-# Clone the repository
-git clone https://github.com/getdataforme/expedia_reviews_spider_apify_hrequest.git
-cd expedia_reviews_spider_apify_hrequest
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run locally (if applicable)
-python src/main.py
+{
+  "imageUrl": "https://images.trvl-media.com/lodging/12345/hero.jpg",
+  "url": "https://www.expedia.com/h12345.Hotel-Information",
+  "id": "12345",
+  "name": "The Miami Beach Resort",
+  "guestRating": 8.6,
+  "guestRatingLabel": "Excellent",
+  "guestReviewCount": 2847,
+  "pricePerNight": "$149 nightly",
+  "totalPrice": "$599",
+  "priceLabel": "$149 per night, $599 total",
+  "stayDuration": "4 nights",
+  "location": "South Beach, Miami",
+  "badges": ["Free cancellation", "Top pick for Miami"],
+  "images": ["https://images.trvl-media.com/lodging/12345/1.jpg"],
+  "checkIn": "2026-04-01",
+  "checkOut": "2026-04-05",
+  "starRating": 4,
+  "address": "123 Ocean Drive, Miami Beach, FL 33139",
+  "amenities": ["Free WiFi", "Outdoor Pool", "Fitness Center"],
+  "highlights": ["Steps from the beach", "Rooftop bar with ocean views"],
+  "nearbyPlaces": [{"name": "South Beach", "distance": "2 min walk"}],
+  "roomCount": 12,
+  "scrapedAt": "2026-03-17T15:30:45.123Z"
+}
 ```
 
-### Input Configuration
+Fields like `starRating`, `address`, `amenities`, `highlights`, `nearbyPlaces`, and `roomCount` are only populated when **Include Hotel Details** is enabled.
 
-The actor accepts input parameters as defined in `.actor/input_schema.json`.
-Common parameters may include:
+## 💎 Why Choose the Expedia Hotel Scraper?
 
-- URLs to scrape
-- Output format preferences
-- Rate limiting settings
-- Custom extraction parameters
+- **Real-Time Rates** - Current nightly rates and total costs straight from Expedia search results
+- **Complete Hotel Profiles** - 23+ data points per property in a single run
+- **Detail Mode** - Optional deep scrape for star ratings, amenities, highlights, and nearby places
+- **Scalable** - From 10 hotels to 1,000,000+ listings per run
+- **Flexible Filtering** - Destination, dates, price range, star rating, guest rating, and sort order
+- **No Coding Required** - Point-and-click interface for researchers, analysts, and business users
 
-## 🔗 Important Links
+## 📋 How to Use
 
-- 🏠 **[Central Repository](https://github.com/getdataforme/central_repo)** - Main development repository
-- 📁 **[This Repository](https://github.com/getdataforme/expedia_reviews_spider_apify_hrequest)** - Generated Apify actor
-- 🕷️ **[Source Spider](https://github.com/getdataforme/central_repo/blob/main/central_repo/src/custom/expedia/hrequest/expedia_reviews_spider.py)** - Original spider file
-- 📚 **[Apify Documentation](https://docs.apify.com/)** - Apify platform documentation
+1. [Create a free Apify account](https://console.apify.com/sign-up?fpr=vmoqkp) with $5 credit
+2. Search for **"Expedia Hotel Scraper"** in the Apify Store
+3. Enter your destination, dates, and filters
+4. Click **Start** - the scraper handles everything automatically
+5. Download results as JSON, CSV, or Excel
+6. Optional: Connect to Make, Zapier, or Google Drive for automated workflows
 
-## ⚠️ Important Notes
+## 🎯 Business Use Cases
 
-- **This repository is auto-generated** - Direct changes will be overwritten
-- **All modifications** should be made in the central repository
-- **Synchronization is automatic** - No manual intervention required
-- **Issues and PRs** should be submitted to the central repository
+- **Hotel Comparison** - Travel agents compare hundreds of properties at once to find the best deals
+- **Market Analysis** - Hospitality analysts track competitor rates, amenities, and guest satisfaction
+- **Price Monitoring** - Travel sites and newsletters monitor pricing trends across destinations
+- **Research & Data Science** - Academics and ML engineers build travel datasets with real Expedia data
+- **Investment Due Diligence** - Real estate investors evaluate hospitality portfolios in target markets
 
 ---
 
-*This README was automatically generated on 2025-08-01 11:04:31 UTC by the central repository sync process.*
+## 🌟 Beyond business use cases
 
-## Apify Actor
+Data like this powers more than commercial workflows. The same structured records support research, education, civic projects, and personal initiatives.
 
-This actor is published on [Apify](https://apify.com/).
+| ### 🎓 Research and academia     - Empirical datasets for papers, thesis work, and coursework - Longitudinal studies tracking changes across snapshots - Reproducible research with cited, versioned data pulls - Classroom exercises on data analysis and ethical scraping | ### 🎨 Personal and creative     - Side projects, portfolio demos, and indie app launches - Data visualizations, dashboards, and infographics - Content research for bloggers, YouTubers, and podcasters - Hobbyist collections and personal trackers |
+| --- | --- |
+| ### 🤝 Non-profit and civic     - Transparency reporting and accountability projects - Advocacy campaigns backed by public-interest data - Community-run databases for local issues - Investigative journalism on public records | ### 🧪 Experimentation     - Prototype AI and machine-learning pipelines with real data - Validate product-market hypotheses before engineering spend - Train small domain-specific models on niche corpora - Test dashboard concepts with live input |
 
-### Actor Details
+## ❓ FAQ
 
-- **Actor Name**: expedia-reviews-spider-test
-- **Organization**: See Apify Console
-- **Console URL**: [https://console.apify.com/organization/3JrVZU8vEdLyeD4hC/actors/tLNVHf65UtYsrB7uy#/builds/0.0.1](https://console.apify.com/organization/3JrVZU8vEdLyeD4hC/actors/tLNVHf65UtYsrB7uy#/builds/0.0.1)
+**Is the data accurate?**
+Yes. Data is collected in real-time from Expedia search results. Prices and ratings reflect current availability at the time of scraping.
 
-### Deployment
+**Can I schedule regular monitoring?**
+Yes. Use Apify's scheduler for daily, weekly, or monthly runs with automatic export to Google Drive, Slack, or databases.
 
-This actor is automatically deployed to Apify when changes are pushed to the `main` branch via GitHub Actions.
+**What if I need more than 100 hotels?**
+Free users are limited to 100 per run. Paid plans support up to 1,000,000 hotels per execution.
 
-To run this actor:
+**What's the difference between basic and detail mode?**
+Basic mode collects listing data (name, price, rating, images). Detail mode visits each hotel page for additional fields like star rating, address, amenities, and nearby places - but takes longer.
 
-1. Visit the Apify Console link above
-2. Configure the input parameters
-3. Click "Start" to run the actor
+**What format is the output?**
+JSON by default, with export to CSV and Excel. All fields are labeled for easy import into spreadsheets and databases.
+
+## 🔗 Integrate Expedia Hotel Scraper with any app
+
+- [Make](https://docs.apify.com/platform/integrations/make) - Automate workflows
+- [Zapier](https://docs.apify.com/platform/integrations/zapier) - Connect 5000+ apps
+- [GitHub](https://docs.apify.com/platform/integrations/github) - Version control
+- [Slack](https://docs.apify.com/platform/integrations/slack) - Notifications
+- [Airbyte](https://docs.apify.com/platform/integrations/airbyte) - Data pipelines
+- [Google Drive](https://docs.apify.com/platform/integrations/drive) - Export to sheets
+
+## 💡 More ParseForge Actors
+
+- [Hotels.com Scraper](https://apify.com/parseforge/hotels-com-scraper) - Extract hotel listings from Hotels.com
+- [Booking.com Scraper](https://apify.com/parseforge/booking-com-scraper) - Collect accommodation data from Booking.com
+- [Airbnb Scraper](https://apify.com/parseforge/airbnb-scraper) - Scrape vacation rental listings
+- [TripAdvisor Scraper](https://apify.com/parseforge/tripadvisor-scraper) - Extract reviews and ratings
+
+Browse our [complete collection](https://apify.com/parseforge) for more.
+
+## 🚀 Ready to Start?
+
+[Try the Expedia Hotel Scraper free](https://console.apify.com/sign-up?fpr=vmoqkp) - $5 credit included, no card required.
+
+## 🆘 Need Help?
+
+Check the FAQ section above for answers to common questions. For additional support, visit the [Apify documentation](https://docs.apify.com).
+
+## 📞 Contact
+
+Contact us to request a new scraper, propose a custom data project, or report a technical issue with this actor at [https://tally.so/r/BzdKgA](https://tally.so/r/BzdKgA)
+
+## ⚠️ Disclaimer
+
+This Actor is an independent tool and is not affiliated with, endorsed by, or sponsored by Expedia or any of its subsidiaries. All trademarks are the property of their respective owners.
